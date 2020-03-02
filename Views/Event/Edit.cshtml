@@ -1,0 +1,32 @@
+﻿@using EventManager
+
+@model  Event
+@{
+    ViewBag.Title = "Edit Event";
+}
+
+<link href="@Url.Content("~/Content/Gridmvc.css")" rel="stylesheet" />
+<link href="@Url.Content("~/Content/bootstrap.min.css")" rel="stylesheet" />
+
+<script src="@Url.Content("~/Scripts/jquery-3.4.1.min.js")"></script>
+<script src="@Url.Content("~/Scripts/gridmvc.min.js")"></script>
+
+<div class="jumbotron">
+
+    @{
+        @Html.Label("Returned View from Controller:")
+        <br />
+        @Html.Label("Id:")
+        @Html.Label(@Model.Id.ToString())
+        <br />
+        @Html.Label("Nombre:")
+        @Html.LabelForModel(@Model.Name)
+        <br />
+        @Html.Label("Código de lenguaje:")
+        @Html.LabelForModel(@Model.Language.Code)
+        <br />
+        @Html.Label("Nombre compañia:")
+        @Html.LabelForModel(@Model.Company.Name)
+    }
+
+</div>
