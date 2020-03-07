@@ -44,9 +44,7 @@ namespace EventManager.Controllers
             //Update(_event); 
              
             Session["selectCompanies"] = Session["selectCompanies"] ?? GetSelectedCompanies();
-
             Session["Id"] = (Session["Id"] == null || (int)Session["Id"] != id) ? id : (int)Session["Id"];
-
             Session["event"] = Get((int)Session["Id"]);
 
             return View((Event)Session["event"]);
@@ -144,7 +142,6 @@ namespace EventManager.Controllers
         private List<SelectListItem> GetSelectedCompanies()
         {
             var selectedList = new List<SelectListItem>();
-
             ((List<Company>) GetCompanies()).ForEach(c =>
 
                 selectedList.Add(new SelectListItem
