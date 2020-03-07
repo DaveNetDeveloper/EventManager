@@ -2,7 +2,7 @@
 
 namespace EventManager
 { 
-    public class Language : IEntity 
+    public class Language : IDbEntity
     {
         [Required]
         public int Id { get; set; }

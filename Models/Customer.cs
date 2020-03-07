@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EventManager
 {
-    public class Customer : IEntity, IAuditEntity
+    public class Customer : IDbEntity, IAuditEntity
     {
         [Required]
         public int Id { get; set; }

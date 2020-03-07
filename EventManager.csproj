@@ -144,6 +144,7 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\EventController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -152,9 +153,10 @@
     </Compile>
     <Compile Include="Helpers\BootstrapHtml.cs" />
     <Compile Include="Interfaces\IAuditEntity.cs" />
-    <Compile Include="Interfaces\IEntity.cs" />
-    <Compile Include="Interfaces\IEntityController.cs" />
+    <Compile Include="Interfaces\IDbEntity.cs" />
+    <Compile Include="Interfaces\IDbController.cs" />
     <Compile Include="Models\City.cs" />
+    <Compile Include="Models\Login.cs" />
     <Compile Include="Models\Language.cs" />
     <Compile Include="Models\Company.cs" />
     <Compile Include="Models\Country.cs" />
@@ -207,6 +209,7 @@
     <Content Include="Views\Event\Index.cshtml" />
     <Content Include="Views\Event\Edit.cshtml" />
     <Content Include="Views\Shared\NotFound.cshtml" />
+    <Content Include="Views\Login\Login.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

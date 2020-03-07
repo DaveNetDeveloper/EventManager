@@ -3,7 +3,7 @@
 namespace EventManager
 {
 
-    public class Country : IEntity
+    public class Country : IDbEntity
     {
         [Required]
         public int Id { get; set; }

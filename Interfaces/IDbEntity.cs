@@ -1,6 +1,6 @@
 ﻿namespace EventManager
 {
-    public interface IEntity
+    public interface IDbEntity
     {
         int Id { get; set; }
 

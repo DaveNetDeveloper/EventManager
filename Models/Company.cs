@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EventManager
 {
-    public class Company : IEntity
+    public class Company : IDbEntity
     {
         [Required]
         public int Id { get; set; }

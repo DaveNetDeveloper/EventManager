@@ -6,7 +6,7 @@ using System.Web.Mvc;
 namespace EventManager.Controllers
 {
     [HandleError]
-    public class EventController : Controller, IEntityController
+    public class EventController : Controller, IDbController
     {
         public EventController() { }
 
@@ -42,11 +42,14 @@ namespace EventManager.Controllers
         {
             //var _event = new Event() { Id = 2, Name = "Evento modificado", Updated = DateTime.Now };
             //Update(_event); 
-             
+            //
+            //Fill Combos
             Session["selectCompanies"] = Session["selectCompanies"] ?? GetSelectedCompanies();
-            Session["Id"] = (Session["Id"] == null || (int)Session["Id"] != id) ? id : (int)Session["Id"];
+            Session["Id"] = (Session["Id"] == null) ? id : (int)Session["Id"];
             Session["event"] = Get((int)Session["Id"]);
 
+            Session["selectLanguages"] = Session["selectLanguages"] ?? GetSelectedLanguages();
+             
             return View((Event)Session["event"]);
         }
         public bool Delete(int id)
@@ -60,7 +63,7 @@ namespace EventManager.Controllers
 
             return true;
         }
-        public IEnumerable<IEntity> GetEvents()
+        public IEnumerable<IDbEntity> GetEvents()
         {
             using (ApplicationDbContext context = new ApplicationDbContext())
             {
@@ -68,17 +71,8 @@ namespace EventManager.Controllers
                 //.Include("Company")
                 //.Include("Language").ToList();
             }
-        }
-        public IEnumerable<IEntity> GetCompanies()
-        {
-            using (ApplicationDbContext context = new ApplicationDbContext())
-            {
-                return context.Company.ToList();
-                //.Include("Company")
-                //.Include("Language").ToList();
-            }
-        }
-        public IEntity Get(int id)
+        } 
+        public IDbEntity Get(int id)
         {
             using (ApplicationDbContext context = new ApplicationDbContext())
             {
@@ -98,7 +92,7 @@ namespace EventManager.Controllers
                     .FirstOrDefault();
             }
         }
-        public int Create(IEntity entity)
+        public int Create(IDbEntity entity)
         {
             using (ApplicationDbContext context = new ApplicationDbContext())
             {
@@ -126,7 +120,7 @@ namespace EventManager.Controllers
                 context.SaveChanges();
             }
         }
-        public bool Update(IEntity entity)
+        public bool Update(IDbEntity entity)
         {
             using (ApplicationDbContext context = new ApplicationDbContext())
             {
@@ -139,6 +133,7 @@ namespace EventManager.Controllers
             return true;
         }
          
+        //privates
         private List<SelectListItem> GetSelectedCompanies()
         {
             var selectedList = new List<SelectListItem>();
@@ -147,10 +142,35 @@ namespace EventManager.Controllers
                 selectedList.Add(new SelectListItem
                 {
                     Value = c.Id.ToString(),
-                    Text = c.Name,
-                    Selected = false
+                    Text = c.Name
                 })); 
             return selectedList;
+        } 
+        private List<SelectListItem> GetSelectedLanguages()
+        {
+            var selectedList = new List<SelectListItem>();
+            ((List<Language>)GetLanguages()).ForEach(l =>
+
+               selectedList.Add(new SelectListItem
+               {
+                   Value = l.Id.ToString(),
+                   Text = l.Name
+               }));
+            return selectedList;
+        }
+        private IEnumerable<IDbEntity> GetCompanies()
+        {
+            using (ApplicationDbContext context = new ApplicationDbContext())
+            {
+                return context.Company.ToList(); 
+            }
+        }
+        private IEnumerable<IDbEntity> GetLanguages()
+        {
+            using (ApplicationDbContext context = new ApplicationDbContext())
+            {
+                return context.Language.ToList(); 
+            }
         } 
     }
 }

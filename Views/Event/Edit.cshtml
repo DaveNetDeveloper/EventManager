@@ -14,30 +14,79 @@
 
 @*<script src="@Url.Content("~/Scripts/popper.min.js")"></script>*@
 
-<div class="jumbotron">
+<style type="text/css"> 
+    .form-control option { 
+        display: block;
+        padding: 3px 20px;
+        clear: both;
+        font-weight: 400;
+        line-height: 1.42857143;
+        color: #333;
+        white-space: nowrap;
+        text-decoration: none;
+        cursor: pointer;
+        background-color: white;
+    } 
+    .form-control:hover { 
+        color: #333;
+        background-color: #e6e6e6;
+        border-color: #adadad;
+        cursor: pointer;
 
-    @{
-        @Html.Label("Returned View from Controller:")
-        <br />
-        @Html.Label("Id:")
-        @Html.Label(@Model.Id.ToString())
-        <br />
-        @Html.Label("Nombre:")
-        @Html.LabelForModel(@Model.Name)
-        <br />
-        @*@Html.Label("Código de lenguaje:")
-            @Html.LabelForModel(@Model.Language.Code)
-            <br />
-            @Html.Label("Nombre compañia:")
-            @Html.LabelForModel(@Model.Company.Name)*@
+    } 
+    .form-control option::-moz-selection { background: yellow; }
+
+    .form-control option::selection { background: yellow; }
+
+    .form-control option:focus, option:hover {
+        color: #262626 !important;
+        text-decoration: none !important;
+        background-color: red !important;
+        cursor: pointer;
     }
-     
-  @using (Html.BeginForm("", "", FormMethod.Post))
-    { 
-        <div class="form-group"> 
-            <div class="col-md-10">
-                @BootstrapHtml.Dropdown("dropdownMenu", (List<SelectListItem>)Session["selectCompanies"], "Select a company")
+
+</style> 
+<div class="jumbotron" style="min-height: 400px;">
+    @{
+        <h2>Login</h2>
+        <br />
+        <form>
+            <div class="form-group">
+                <div class="form-row">
+                    <div class="col">
+                        <input readonly type="text" class="form-control" placeholder="Event Id" value="@Model.Id.ToString()">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col">
+                        <input type="text" class="form-control" placeholder="Event Name" value="@Model.Name">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col">
+                        <input type="text" class="form-control" placeholder="Event Description" value="@Model.Description">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col">
+                        <input type="number" class="form-control" min="1" max="99" step="1" placeholder="Event Capacity" value="@Model.Capacity">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col">
+                        <input type="datetime" class="form-control" placeholder="Event Date" value="@Model.EventDateTime.Value">
+                    </div>
+                </div>
+                <div class="form-row"> 
+                    @Html.Label("Compañia:")
+                    @Html.DropDownListFor(e => e.CompanyId, (List<SelectListItem>)Session["selectCompanies"], "- Please select a company -", new { @class = "form-control" })
+                </div>
+                <div class="form-row">
+
+                    @Html.Label("Idioma:")
+                    @Html.DropDownListFor(e => e.LanguageId, (List<SelectListItem>)Session["selectLanguages"], "- Please select a language -", new { @class = "form-control" })
+                </div>
             </div>
-        </div>  
+        </form>
     }
 </div>
