@@ -1,0 +1,19 @@
+﻿@model System.Web.Mvc.HandleErrorInfo
+
+@{
+    ViewBag.Title = "Error";
+}
+
+<div style="color: White; height: 25px;"></div>
+<div style="background-color: aliceblue; height: 170px;">
+    <div style=" padding:20px;">
+        <h3>
+            Application default error page:
+        </h3>
+        <h4>
+            Sorry, an error occurred while processing your request.
+        </h4>
+        <h6>@Html.ActionLink("Go Back To Previous Page", "Index", "Event")</h6>
+    </div>
+</div>
+<div style="color: White; height: 25px;"></div>  

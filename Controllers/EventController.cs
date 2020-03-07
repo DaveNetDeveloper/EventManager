@@ -5,20 +5,16 @@ using System.Web.Mvc;
 
 namespace EventManager.Controllers
 {
+    [HandleError]
     public class EventController : Controller, IEntityController
     {
-        public EventController()
-        {
-            //_context = new ApplicationDbContext();
-        }
+        public EventController() { }
+
         public ActionResult Index()
         {
-            //_ = this.Get(1);
-            //_ = this.Get("Event 2");
-
             if (Session["allDataList"] == null)
             {
-                var allEvents = this.GetEvents();
+                var allEvents = GetEvents();
                 ViewData.Model = allEvents;
 
                 //TempData.Add("allDataList", allEvents);
@@ -40,16 +36,19 @@ namespace EventManager.Controllers
 
             return View("Index");
         }
-        
-        //[AcceptVerbs(HttpVerbs.Post)]
+
+        [HandleError]
         public ActionResult Edit(int id)
         {
             //var _event = new Event() { Id = 2, Name = "Evento modificado", Updated = DateTime.Now };
-            //this.Update(_event); 
+            //Update(_event); 
              
             Session["selectCompanies"] = Session["selectCompanies"] ?? GetSelectedCompanies();
 
-            Session["event"] = Session["event"] ?? this.Get(id); 
+            Session["Id"] = (Session["Id"] == null || (int)Session["Id"] != id) ? id : (int)Session["Id"];
+
+            Session["event"] = Get((int)Session["Id"]);
+
             return View((Event)Session["event"]);
         }
         public bool Delete(int id)
@@ -107,15 +106,14 @@ namespace EventManager.Controllers
             {
                 var newEvent = new Event
                 {
-                    Name = ((Event)entity).Name != null ? ((Event)entity).Name : "Event name",
+                    Name = ((Event)entity).Name ?? "Event name",
                     Description = ((Event)entity)?.Description ?? "...",
                     Capacity = ((Event)entity).Capacity != null ? ((Event)entity).Capacity : 10,
-                    EventDateTime = ((Event)entity).EventDateTime != null ? ((Event)entity).EventDateTime : DateTime.Now.AddHours(18),
+                    EventDateTime = ((Event)entity).EventDateTime ?? DateTime.Now.AddHours(18),
                     Created = DateTime.Now,
                     CompanyId = 1,
                     LanguageId = 1
                 };
-
                 context.Event.Add(newEvent);
                 context.SaveChanges();
                 return newEvent.Id;
@@ -143,7 +141,7 @@ namespace EventManager.Controllers
             return true;
         }
          
-        protected List<SelectListItem> GetSelectedCompanies()
+        private List<SelectListItem> GetSelectedCompanies()
         {
             var selectedList = new List<SelectListItem>();
 

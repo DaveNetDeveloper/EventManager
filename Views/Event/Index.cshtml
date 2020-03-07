@@ -1,9 +1,7 @@
 ﻿@model IEnumerable<EventManager.Event>
-
 @using GridMvc.Html
-
 @{
-    ViewBag.Title = "Event";
+    ViewBag.Title = "Events";
 }
 
 <link href="@Url.Content("~/Content/Gridmvc.css")" rel="stylesheet" />
@@ -65,20 +63,20 @@
     }
 
     @*<script type="text/javascript">
-        function Loaded(result) {
-            alert('result ' + result.Name);
-        }
-    </script>*@
+            function Loaded(result) {
+                alert('result ' + result.Name);
+            }
+        </script>*@
 
-    @{  
+    @{
         //var eventos = ViewData["allEvents"] as List<Event>;
 
         @Html.Grid(ViewData.Model).Columns(columns =>
         {
-           columns.Add().Titled("<input id='allChk' type='checkbox' /> " )
+           columns.Add().Titled("<input id='allChk' type='checkbox' /> ")
             .Encoded(false).Sanitized(false).SetWidth(30)
-            .RenderValueAs(o =>Html.CheckBox("checked", false, new { name = "checked", value = o.Id,  }));
-             
+            .RenderValueAs(o => Html.CheckBox("checked", false, new { name = "checked", value = o.Id, }));
+
            columns.Add(c => c.Id).Titled("Event ID");
            columns.Add(c => c.Name).Titled("Name");
            columns.Add(c => c.Description).Titled("Description");
@@ -101,22 +99,22 @@
     }
 
 </div>
- 
+
 <script type="text/javascript">
 
-    function selectedCheckbox(status) { 
-        $("input[type=checkbox]").each(function () { 
+    function selectedCheckbox(status) {
+        $("input[type=checkbox]").each(function () {
             $(this).prop("checked", status);
         });
     }
 
     $(document).ready(function () {
-             
-        var checkAllBox = $("#allChk"); 
-        //checkAllBox.prop('checked', true); 
-             
+
+        var checkAllBox = $("#allChk");
+        //checkAllBox.prop('checked', true);
+
         checkAllBox.click(function () {
-            var status = checkAllBox.prop('checked');  
+            var status = checkAllBox.prop('checked');
             selectedCheckbox(status);
         });
     });
