@@ -1,4 +1,5 @@
-﻿@using EventManager
+﻿@using EventManager;
+@using EventManager.Helpers;
 
 @model  Event
 @{
@@ -11,6 +12,8 @@
 <script src="@Url.Content("~/Scripts/jquery-3.4.1.min.js")"></script>
 <script src="@Url.Content("~/Scripts/gridmvc.min.js")"></script>
 
+@*<script src="@Url.Content("~/Scripts/popper.min.js")"></script>*@
+
 <div class="jumbotron">
 
     @{
@@ -22,11 +25,19 @@
         @Html.Label("Nombre:")
         @Html.LabelForModel(@Model.Name)
         <br />
-        @Html.Label("Código de lenguaje:")
-        @Html.LabelForModel(@Model.Language.Code)
-        <br />
-        @Html.Label("Nombre compañia:")
-        @Html.LabelForModel(@Model.Company.Name)
+        @*@Html.Label("Código de lenguaje:")
+            @Html.LabelForModel(@Model.Language.Code)
+            <br />
+            @Html.Label("Nombre compañia:")
+            @Html.LabelForModel(@Model.Company.Name)*@
     }
-
+     
+  @using (Html.BeginForm("", "", FormMethod.Post))
+    { 
+        <div class="form-group"> 
+            <div class="col-md-10">
+                @BootstrapHtml.Dropdown("dropdownMenu", (List<SelectListItem>)Session["selectCompanies"], "Select a company")
+            </div>
+        </div>  
+    }
 </div>

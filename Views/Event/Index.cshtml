@@ -102,39 +102,39 @@
 
 </div>
  
-    <script type="text/javascript">
+<script type="text/javascript">
 
-        function selectedCheckbox(status) { 
-            $("input[type=checkbox]").each(function () { 
-                $(this).prop("checked", status);
-            });
-        }
-
-        $(document).ready(function () {
-             
-            var checkAllBox = $("#allChk"); 
-            //checkAllBox.prop('checked', true); 
-             
-            checkAllBox.click(function () {
-                var status = checkAllBox.prop('checked');  
-                selectedCheckbox(status);
-            });
+    function selectedCheckbox(status) { 
+        $("input[type=checkbox]").each(function () { 
+            $(this).prop("checked", status);
         });
+    }
+
+    $(document).ready(function () {
+             
+        var checkAllBox = $("#allChk"); 
+        //checkAllBox.prop('checked', true); 
+             
+        checkAllBox.click(function () {
+            var status = checkAllBox.prop('checked');  
+            selectedCheckbox(status);
+        });
+    });
 
     function DeleteEventById(eventId, eventName) {
 
         var opcion = confirm("¿Seguro que deseas eliminar el evento [" + eventName + "]?");
         if (opcion == true) {
-             $.ajax({
-             url: '@Url.Action("Delete", "Event")',
-             data: { id: eventId },
-             type: 'POST',
-             success: function () { alert("El evento se ha eliminado correcatemente."); },
-             error: function () { alert("Ha ocurrido un error eliminando el evento."); }
+                $.ajax({
+                url: '@Url.Action("Delete", "Event")',
+                data: { id: eventId },
+                type: 'POST',
+                success: function () { alert("El evento se ha eliminado correcatemente."); },
+                error: function () { alert("Ha ocurrido un error eliminando el evento."); }
         });
 	    } else {
             return false;
         }
     }
 
-    </script> 
+</script> 

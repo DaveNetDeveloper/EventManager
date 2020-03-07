@@ -1,8 +1,6 @@
-﻿using EventManager;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace EventManager.Controllers
@@ -42,18 +40,23 @@ namespace EventManager.Controllers
 
             return View("Index");
         }
+        
+        //[AcceptVerbs(HttpVerbs.Post)]
         public ActionResult Edit(int id)
         {
             //var _event = new Event() { Id = 2, Name = "Evento modificado", Updated = DateTime.Now };
-            //this.Update(_event);
+            //this.Update(_event); 
+             
+            Session["selectCompanies"] = Session["selectCompanies"] ?? GetSelectedCompanies();
 
-
-            return View(this.Get(id));
+            Session["event"] = Session["event"] ?? this.Get(id); 
+            return View((Event)Session["event"]);
         }
         public bool Delete(int id)
         {
             Remove(id);
             var allEvents = GetEvents();
+
             ViewData["allEvents"] = allEvents;
             ViewData.Model = allEvents;
             Session["allDataList"] = allEvents;
@@ -64,7 +67,16 @@ namespace EventManager.Controllers
         {
             using (ApplicationDbContext context = new ApplicationDbContext())
             {
-                return (IEnumerable<Event>)context.Event.ToList();
+                return context.Event.ToList();
+                //.Include("Company")
+                //.Include("Language").ToList();
+            }
+        }
+        public IEnumerable<IEntity> GetCompanies()
+        {
+            using (ApplicationDbContext context = new ApplicationDbContext())
+            {
+                return context.Company.ToList();
                 //.Include("Company")
                 //.Include("Language").ToList();
             }
@@ -73,7 +85,7 @@ namespace EventManager.Controllers
         {
             using (ApplicationDbContext context = new ApplicationDbContext())
             {
-                return ((Event)context.Event
+                return (context.Event
                         //.Include("Company")
                         //.Include("Language")
                         .SingleOrDefault(e => e.Id == id));
@@ -123,11 +135,27 @@ namespace EventManager.Controllers
             using (ApplicationDbContext context = new ApplicationDbContext())
             {
                 var entityToUpdate = context.Event.SingleOrDefault(p => p.Id == ((Event)entity).Id);
+
                 entityToUpdate.Name = ((Event)entity)?.Name;
                 entityToUpdate.Updated = DateTime.Now;
                 context.SaveChanges();
             }
             return true;
         }
+         
+        protected List<SelectListItem> GetSelectedCompanies()
+        {
+            var selectedList = new List<SelectListItem>();
+
+            ((List<Company>) GetCompanies()).ForEach(c =>
+
+                selectedList.Add(new SelectListItem
+                {
+                    Value = c.Id.ToString(),
+                    Text = c.Name,
+                    Selected = false
+                })); 
+            return selectedList;
+        } 
     }
 }
