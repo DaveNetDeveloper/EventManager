@@ -5,11 +5,11 @@ namespace EventManager.Controllers
 {
     internal interface IDbController
     {
-        int Create(IDbEntity pEvent);
+        int CreateEvent(IDbEntity pEvent);
         ActionResult Edit(int id);
         IDbEntity Get(int id);
         IEnumerable<IDbEntity> GetEvents();
         bool Update(IDbEntity entity);
-        bool Delete(int id);
+        ActionResult Delete(int id);
     }
 }

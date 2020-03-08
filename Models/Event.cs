@@ -14,7 +14,8 @@ namespace EventManager//EventManager.Models
         public string Description { get; set; }
         public int? Capacity { get; set; }
         public DateTime? EventDateTime { get; set; }
-
+        public int? Sessions { get; set; }
+        public bool? Active { get; set; }        
         public int CompanyId { get; set; }
         public int LanguageId { get; set; }
 

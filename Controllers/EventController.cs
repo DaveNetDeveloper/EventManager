@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using System.Web.Routing;
 
 namespace EventManager.Controllers
 {
@@ -12,8 +13,10 @@ namespace EventManager.Controllers
 
         public ActionResult Index()
         {
-            if (Session["allDataList"] == null)
-            {
+            //if (Session["allDataList"] == null || (bool?)Session["reCharge"] == true)
+            //{
+                //Session["reCharge"] = false;
+
                 var allEvents = GetEvents();
                 ViewData.Model = allEvents;
 
@@ -22,19 +25,37 @@ namespace EventManager.Controllers
 
                 ViewData["allEvents"] = allEvents;
                 ViewData["firstEvent"] = allEvents.FirstOrDefault();
-            }
+            //}
             return View(((IEnumerable<Event>)Session["allDataList"]));
         }
+        
         public ActionResult AddNew(Event e)
         {
-            Create(e);
+            CreateEvent(e);
 
             var allEvents = GetEvents();
             ViewData["allEvents"] = allEvents;
             ViewData.Model = allEvents;
             Session["allDataList"] = allEvents;
 
-            return View("Index");
+            return RedirectToAction("Index", new RouteValueDictionary(new { controller = "Event", action = "Index"})); 
+        }
+
+        public ActionResult Create()
+        {
+            Session["selectCompanies"] = Session["selectCompanies"] ?? GetSelectedCompanies();
+            Session["selectLanguages"] = Session["selectLanguages"] ?? GetSelectedLanguages();
+
+            var e = new Event
+            {
+                Created = DateTime.Now,
+                Sessions = 0,
+                Capacity = 0,
+                EventDateTime = DateTime.Now,
+                Active = true
+            };
+
+            return View(e);
         }
 
         [HandleError]
@@ -45,23 +66,30 @@ namespace EventManager.Controllers
             //
             //Fill Combos
             Session["selectCompanies"] = Session["selectCompanies"] ?? GetSelectedCompanies();
-            Session["Id"] = (Session["Id"] == null) ? id : (int)Session["Id"];
+            Session["selectLanguages"] = Session["selectLanguages"] ?? GetSelectedLanguages();
+            
+            Session["Id"] = (Session["Id"] == null || (int)Session["Id"] != id) ? id : (int)Session["Id"];
+            
             Session["event"] = Get((int)Session["Id"]);
 
-            Session["selectLanguages"] = Session["selectLanguages"] ?? GetSelectedLanguages();
-             
             return View((Event)Session["event"]);
         }
-        public bool Delete(int id)
+        public ActionResult Disable(List<int> eventIds)
+        {
+            //DisableEvents(eventIds) method()
+            return RedirectToAction("Index", new RouteValueDictionary(new { controller = "Event", action = "Index" }));
+        }
+
+        public ActionResult Delete(int id)
         {
             Remove(id);
-            var allEvents = GetEvents();
+            //var allEvents = GetEvents();
 
-            ViewData["allEvents"] = allEvents;
-            ViewData.Model = allEvents;
-            Session["allDataList"] = allEvents;
+            //ViewData["allDataList"] = allEvents;
+            //ViewData.Model = allEvents; 
 
-            return true;
+            //Session["reCharge"] = true; 
+            return RedirectToAction("Index", new RouteValueDictionary(new { controller = "Event", action = "Index"}));
         }
         public IEnumerable<IDbEntity> GetEvents()
         {
@@ -92,7 +120,7 @@ namespace EventManager.Controllers
                     .FirstOrDefault();
             }
         }
-        public int Create(IDbEntity entity)
+        public int CreateEvent(IDbEntity entity)
         {
             using (ApplicationDbContext context = new ApplicationDbContext())
             {
@@ -103,6 +131,7 @@ namespace EventManager.Controllers
                     Capacity = ((Event)entity).Capacity != null ? ((Event)entity).Capacity : 10,
                     EventDateTime = ((Event)entity).EventDateTime ?? DateTime.Now.AddHours(18),
                     Created = DateTime.Now,
+                    Active = true,
                     CompanyId = 1,
                     LanguageId = 1
                 };
@@ -134,7 +163,7 @@ namespace EventManager.Controllers
         }
          
         //privates
-        private List<SelectListItem> GetSelectedCompanies()
+        protected List<SelectListItem> GetSelectedCompanies()
         {
             var selectedList = new List<SelectListItem>();
             ((List<Company>) GetCompanies()).ForEach(c =>
@@ -146,7 +175,7 @@ namespace EventManager.Controllers
                 })); 
             return selectedList;
         } 
-        private List<SelectListItem> GetSelectedLanguages()
+        protected List<SelectListItem> GetSelectedLanguages()
         {
             var selectedList = new List<SelectListItem>();
             ((List<Language>)GetLanguages()).ForEach(l =>

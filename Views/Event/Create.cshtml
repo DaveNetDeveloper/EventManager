@@ -1,0 +1,149 @@
+﻿@using EventManager;
+
+@model  Event
+@{
+    ViewBag.Title = "Create Event";
+}
+
+<link href="@Url.Content("~/Content/Gridmvc.css")" rel="stylesheet" />
+<link href="@Url.Content("~/Content/bootstrap.min.css")" rel="stylesheet" />
+
+<script src="@Url.Content("~/Scripts/jquery-3.4.1.min.js")"></script>
+<script src="@Url.Content("~/Scripts/gridmvc.min.js")"></script>
+<script src="@Url.Content("~/Scripts/popper.min.js")"></script>
+
+@*<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">*@
+@*<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>*@
+
+<style type="text/css">
+    .form-control option {
+        display: block;
+        padding: 3px 20px;
+        clear: both;
+        font-weight: 400;
+        line-height: 1.42857143;
+        color: #333;
+        white-space: nowrap;
+        text-decoration: none;
+        cursor: pointer;
+        background-color: white;
+    } 
+    .form-control:hover {
+        color: #333;
+        background-color: #e6e6e6;
+        border-color: #adadad;
+        cursor: pointer;
+    } 
+    .form-control option::-moz-selection {
+        background: yellow;
+    } 
+    .form-control option::selection {
+        background: yellow;
+    } 
+    .form-control option:focus, option:hover {
+        color: #262626 !important;
+        text-decoration: none !important;
+        background-color: red !important;
+        cursor: pointer;
+    } 
+    .form-group .form-row {
+        margin-bottom: 10px;
+    }
+</style>
+
+<div class="jumbotron" style="min-height: 400px;">
+    <h2>Create Event</h2>
+    <br />
+    <div class="form-group">
+        <div class="form-row">
+            <div class="col">
+                <input readonly id="modelId" name="modelId" type="text" class="form-control" placeholder="Event Id"
+                       value="@(Model.Id == 0 ? string.Empty : @Model.Id.ToString())" />
+            </div>
+            <div class="col">
+                <input type="text" id="modelName" name="modelName" class="form-control" placeholder="Event Name" value="@Model.Name" />
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="col">
+                <input type="text" id="modelDescription" name="modelDescription" class="form-control" placeholder="Event Description" value="@Model.Description" />
+            </div>
+            <div class="col">
+                <input type="number" id="modelCapacity" class="form-control" min="1" max="99" step="1" placeholder="Event Capacity"
+                       value="@(Model.Capacity == 0 ? "1" : @Model.Capacity.ToString())" />
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="col">
+                <input type="datetime" id="modelEventDateTime" class="form-control" placeholder="Event Date" value="@Model.EventDateTime.Value" />
+            </div>
+            <div class="col">
+                <input type="number" id="modelSessions" class="form-control" min="1" max="99" step="1" placeholder="Nº Sessions"
+                       value="@(Model.Sessions == 0 ? "1" : @Model.Sessions.ToString())" />
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="col">
+                <label for="modelActive">Active</label>
+                <input style="margin-left:10px;" type="checkbox" id="modelActive"  checked="@(Model.Active.Value)" />
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="col">
+                @Html.Label("Compañia:")
+                @Html.DropDownListFor(e => e.CompanyId, (List<SelectListItem>)Session["selectCompanies"], "- Please select a company -", new { @class = "form-control", @id = "model.Company" })
+            </div>
+            <div class="col">
+                @Html.Label("Idioma:")
+                @Html.DropDownListFor(e => e.LanguageId, (List<SelectListItem>)Session["selectLanguages"], "- Please select a language -", new { @class = "form-control", @id = "model.Language" })
+            </div>
+        </div>
+        <div class="form-row">
+            <br />
+            <div class="col">
+                <button type="button" class="btn btn-success">Crear</button>
+            </div>
+            <br />
+            <div class="col">
+                <input type="button" class="btn btn-primary" value="Cancelar" onclick="location.href='@Url.Action("Index", "Event")'" />
+            </div>
+             
+
+            <br />@*TEST*@
+            <input type="button" class="btn btn-danger" id="GetValueBtn" value="GetValue" onclick="GetValue" />
+
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+        $("#GetValueBtn").click(function () {
+            GetValue();
+        });
+    });
+
+    function GetValue() {
+
+        var event = {
+            Id: $("#modelId").val(),
+            Name: $("#modelName").val(),
+            Description: $("#modelDescription").val(),
+            Capacity: $("#modelCapacity").val(),
+            Sessions: $("#modelSessions").val(),
+            EventDateTime: $("#modelEventDateTime").val(),
+            Active: $("#modelActive").prop("checked")
+        };
+
+        //test new object 
+        alert(event.Name);
+        alert(event.Description);
+        alert(event.Sessions);
+        alert(event.Active);
+
+        //Call to create controller passing object
+         
+
+    }
+</script>

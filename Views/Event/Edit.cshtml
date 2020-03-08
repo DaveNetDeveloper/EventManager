@@ -1,5 +1,4 @@
 ﻿@using EventManager;
-@using EventManager.Helpers;
 
 @model  Event
 @{
@@ -11,11 +10,13 @@
 
 <script src="@Url.Content("~/Scripts/jquery-3.4.1.min.js")"></script>
 <script src="@Url.Content("~/Scripts/gridmvc.min.js")"></script>
+<script src="@Url.Content("~/Scripts/popper.min.js")"></script>
 
-@*<script src="@Url.Content("~/Scripts/popper.min.js")"></script>*@
+@*<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">*@
+@*<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>*@
 
-<style type="text/css"> 
-    .form-control option { 
+<style type="text/css">
+    .form-control option {
         display: block;
         padding: 3px 20px;
         clear: both;
@@ -26,17 +27,22 @@
         text-decoration: none;
         cursor: pointer;
         background-color: white;
-    } 
-    .form-control:hover { 
+    }
+
+    .form-control:hover {
         color: #333;
         background-color: #e6e6e6;
         border-color: #adadad;
         cursor: pointer;
+    }
 
-    } 
-    .form-control option::-moz-selection { background: yellow; }
+    .form-control option::-moz-selection {
+        background: yellow;
+    }
 
-    .form-control option::selection { background: yellow; }
+    .form-control option::selection {
+        background: yellow;
+    }
 
     .form-control option:focus, option:hover {
         color: #262626 !important;
@@ -45,48 +51,68 @@
         cursor: pointer;
     }
 
-</style> 
-<div class="jumbotron" style="min-height: 400px;">
-    @{
-        <h2>Login</h2>
-        <br />
-        <form>
-            <div class="form-group">
-                <div class="form-row">
-                    <div class="col">
-                        <input readonly type="text" class="form-control" placeholder="Event Id" value="@Model.Id.ToString()">
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="col">
-                        <input type="text" class="form-control" placeholder="Event Name" value="@Model.Name">
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="col">
-                        <input type="text" class="form-control" placeholder="Event Description" value="@Model.Description">
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="col">
-                        <input type="number" class="form-control" min="1" max="99" step="1" placeholder="Event Capacity" value="@Model.Capacity">
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="col">
-                        <input type="datetime" class="form-control" placeholder="Event Date" value="@Model.EventDateTime.Value">
-                    </div>
-                </div>
-                <div class="form-row"> 
-                    @Html.Label("Compañia:")
-                    @Html.DropDownListFor(e => e.CompanyId, (List<SelectListItem>)Session["selectCompanies"], "- Please select a company -", new { @class = "form-control" })
-                </div>
-                <div class="form-row">
 
-                    @Html.Label("Idioma:")
-                    @Html.DropDownListFor(e => e.LanguageId, (List<SelectListItem>)Session["selectLanguages"], "- Please select a language -", new { @class = "form-control" })
-                </div>
-            </div>
-        </form>
+    .form-group .form-row {
+        margin-bottom: 10px;
     }
+</style>
+
+<div class="jumbotron" style="min-height: 400px;">
+    <h2>Edit Event</h2>
+    <br />
+    <div class="form-group">
+        <div class="form-row">
+            <div class="col">
+                <input readonly type="text" id="modelId" class="form-control" placeholder="Event Id" value="@Model.Id.ToString()" />
+            </div>
+            <div class="col">
+                <input type="text" id="modelName" class="form-control" placeholder="Event Name" value="@Model.Name" />
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="col">
+                <input type="text" id="modelDescription" class="form-control" placeholder="Event Description" value="@Model.Description" />
+            </div>
+            <div class="col">
+                <input type="number" id="modelCapacity" class="form-control" min="1" max="99" step="1" placeholder="Event Capacity" value="@Model.Capacity" />
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="col">
+                <input type="datetime" id="modelEventDate" class="form-control" placeholder="Event Date" value="@Model.EventDateTime.Value" />
+            </div>
+            <div class="col">
+                <input type="number" id="modelSessions" class="form-control" placeholder="Nº Sessions" value="@Model.Sessions" />
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="col">
+                <input type="checkbox" id="modelActive" class="form-control" checked="@(Model.Active.Value)">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="col">
+                @Html.Label("Compañia:")
+                @Html.DropDownListFor(e => e.CompanyId, (List<SelectListItem>)Session["selectCompanies"], "- Please select a company -", new { @class = "form-control" })
+            </div>
+            <div class="col">
+                @Html.Label("Idioma:")
+                @Html.DropDownListFor(e => e.LanguageId, (List<SelectListItem>)Session["selectLanguages"], "- Please select a language -", new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-row">
+            <br />
+            <div class="col">
+                <button type="button" class="btn btn-success">Guardar</button>
+            </div>
+            <br />
+            <div class="col">
+                <button type="button" class="btn btn-danger" onclick="location.href='@Url.Action("Delete", "Event", new { id = @Model.Id })'">Eliminar</button>
+            </div>
+            <br />
+            <div class="col">
+                <input type="button" class="btn btn-primary" value="Cancelar" onclick="location.href='@Url.Action("Index", "Event")'" />
+            </div>
+        </div>
+    </div>
 </div>
