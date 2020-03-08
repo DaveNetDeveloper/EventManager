@@ -9,8 +9,7 @@ namespace EventManager.Controllers
     [HandleError]
     public class EventController : Controller, IDbController
     {
-        public EventController() { }
-
+        public EventController() { } 
         public ActionResult Index()
         { 
             var allEvents = GetEvents();
@@ -22,8 +21,7 @@ namespace EventManager.Controllers
             ViewData["firstEvent"] = allEvents.FirstOrDefault();
             
             return View(((IEnumerable<Event>)Session["allDataList"]));
-        }
-        
+        } 
         public ActionResult AddNew(Event e)
         {
             CreateEvent(e);

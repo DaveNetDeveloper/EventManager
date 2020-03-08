@@ -85,7 +85,7 @@
         <div class="form-row">
             <div class="col">
                 <label for="modelActive">Active</label>
-                <input style="margin-left:10px;" type="checkbox" id="modelActive"  checked="@(Model.Active.Value)" />
+                <input style="margin-left:10px;" type="checkbox" id="modelActive" checked="@(Model.Active.Value)" />
             </div>
         </div>
         <div class="form-row">
@@ -120,7 +120,7 @@
             if (IsValid()) { 
                 $.ajax({
                     url: '@Url.Action("CreateEvent", "Event")',
-                    data: { entity: BuildEvent() },
+                    data: { entity: BuildNewEvent() },
                     type: 'POST',
                     success: function (data) { alert("El nuevo evento [" + data + "] se ha creado correcatemente."); ReturnToIndex(); },
                     error: function () { alert("Ha ocurrido un error creando el nuevo evento."); }
@@ -137,7 +137,7 @@
         }); 
     });
 
-    function BuildEvent()
+    function BuildNewEvent()
     { 
         var event = {
             Id: $("#modelId").val(),
