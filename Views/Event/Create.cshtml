@@ -91,41 +91,54 @@
         <div class="form-row">
             <div class="col">
                 @Html.Label("Compañia:")
-                @Html.DropDownListFor(e => e.CompanyId, (List<SelectListItem>)Session["selectCompanies"], "- Please select a company -", new { @class = "form-control", @id = "model.Company" })
+                @Html.DropDownListFor(e => e.CompanyId, (List<SelectListItem>)Session["selectCompanies"], "- Please select a company -", new { @class = "form-control", @id = "modelCompany" })
             </div>
             <div class="col">
                 @Html.Label("Idioma:")
-                @Html.DropDownListFor(e => e.LanguageId, (List<SelectListItem>)Session["selectLanguages"], "- Please select a language -", new { @class = "form-control", @id = "model.Language" })
+                @Html.DropDownListFor(e => e.LanguageId, (List<SelectListItem>)Session["selectLanguages"], "- Please select a language -", new { @class = "form-control", @id = "modelLanguage" })
             </div>
         </div>
         <div class="form-row">
             <br />
             <div class="col">
-                <button type="button" class="btn btn-success">Crear</button>
+                <button type="button" class="btn btn-success" id="CreateBtn" value="Create">Create</button>
             </div>
             <br />
             <div class="col">
-                <input type="button" class="btn btn-primary" value="Cancelar" onclick="location.href='@Url.Action("Index", "Event")'" />
+                <input type="button" class="btn btn-primary" id="CancelBtn" value="Cancelar" />
             </div>
-             
-
-            <br />@*TEST*@
-            <input type="button" class="btn btn-danger" id="GetValueBtn" value="GetValue" onclick="GetValue" />
-
+            @*onclick="location.href='@Url.Action("Index", "Event")'"*@
         </div>
     </div>
 </div>
 <script type="text/javascript">
 
-    $(document).ready(function () {
+    $(document).ready(function () {  
 
-        $("#GetValueBtn").click(function () {
-            GetValue();
-        });
+        //Click on create
+        $("#CreateBtn").click(function () { 
+            if (IsValid()) { 
+                $.ajax({
+                    url: '@Url.Action("CreateEvent", "Event")',
+                    data: { entity: BuildEvent() },
+                    type: 'POST',
+                    success: function (data) { alert("El nuevo evento [" + data + "] se ha creado correcatemente."); ReturnToIndex(); },
+                    error: function () { alert("Ha ocurrido un error creando el nuevo evento."); }
+                });
+            }
+            else { 
+                alert("Formulario no válido...");
+            }
+        }); 
+
+        //Click on cancel
+        $("#CancelBtn").click(function () { 
+            return ConfirmCancel();
+        }); 
     });
 
-    function GetValue() {
-
+    function BuildEvent()
+    { 
         var event = {
             Id: $("#modelId").val(),
             Name: $("#modelName").val(),
@@ -133,17 +146,27 @@
             Capacity: $("#modelCapacity").val(),
             Sessions: $("#modelSessions").val(),
             EventDateTime: $("#modelEventDateTime").val(),
-            Active: $("#modelActive").prop("checked")
-        };
-
-        //test new object 
-        alert(event.Name);
-        alert(event.Description);
-        alert(event.Sessions);
-        alert(event.Active);
-
-        //Call to create controller passing object
-         
-
+            Active: $("#modelActive").prop("checked"),
+            CompanyId: $("#modelCompany").val(),
+            LanguageId: $("#modelLanguage").val() 
+        }; 
+        return event;
     }
+
+    function IsValid() {
+
+        return true;
+    }
+
+    function ConfirmCancel() {
+
+        if (confirm("¿Seguro que deseas cancelar y salir?") == true) {
+            ReturnToIndex();
+        }
+        else return false;
+    }
+
+     function ReturnToIndex() {
+        location.href = '@Url.Action("Index", "Event")';
+    } 
 </script>

@@ -12,20 +12,15 @@ namespace EventManager.Controllers
         public EventController() { }
 
         public ActionResult Index()
-        {
-            //if (Session["allDataList"] == null || (bool?)Session["reCharge"] == true)
-            //{
-                //Session["reCharge"] = false;
+        { 
+            var allEvents = GetEvents();
+            ViewData.Model = allEvents;
+             
+            Session["allDataList"] = allEvents;
 
-                var allEvents = GetEvents();
-                ViewData.Model = allEvents;
-
-                //TempData.Add("allDataList", allEvents);
-                Session["allDataList"] = allEvents;
-
-                ViewData["allEvents"] = allEvents;
-                ViewData["firstEvent"] = allEvents.FirstOrDefault();
-            //}
+            ViewData["allEvents"] = allEvents;
+            ViewData["firstEvent"] = allEvents.FirstOrDefault();
+            
             return View(((IEnumerable<Event>)Session["allDataList"]));
         }
         
@@ -76,10 +71,9 @@ namespace EventManager.Controllers
         }
         public ActionResult Disable(List<int> eventIds)
         {
-            //DisableEvents(eventIds) method()
+            //DisableEvents(eventIds);
             return RedirectToAction("Index", new RouteValueDictionary(new { controller = "Event", action = "Index" }));
-        }
-
+        } 
         public ActionResult Delete(int id)
         {
             Remove(id);
@@ -120,20 +114,21 @@ namespace EventManager.Controllers
                     .FirstOrDefault();
             }
         }
-        public int CreateEvent(IDbEntity entity)
+        public int CreateEvent(Event entity)
         {
             using (ApplicationDbContext context = new ApplicationDbContext())
             {
                 var newEvent = new Event
                 {
-                    Name = ((Event)entity).Name ?? "Event name",
-                    Description = ((Event)entity)?.Description ?? "...",
-                    Capacity = ((Event)entity).Capacity != null ? ((Event)entity).Capacity : 10,
-                    EventDateTime = ((Event)entity).EventDateTime ?? DateTime.Now.AddHours(18),
+                    Name = entity.Name ?? "Event name",
+                    Description = entity?.Description ?? "...",
+                    Capacity = entity.Capacity != null ? entity.Capacity : 0,
+                    Sessions = entity.Sessions != null ? entity.Sessions : 0,
+                    EventDateTime = entity.EventDateTime ?? DateTime.Now,
                     Created = DateTime.Now,
                     Active = true,
-                    CompanyId = 1,
-                    LanguageId = 1
+                    CompanyId = entity.CompanyId,
+                    LanguageId = entity.LanguageId
                 };
                 context.Event.Add(newEvent);
                 context.SaveChanges();

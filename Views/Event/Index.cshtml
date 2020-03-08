@@ -3,7 +3,6 @@
 @{
     ViewBag.Title = "Events";
 }
-
 <link href="@Url.Content("~/Content/Gridmvc.css")" rel="stylesheet" />
 <link href="@Url.Content("~/Content/bootstrap.min.css")" rel="stylesheet" />
 
@@ -15,12 +14,9 @@
        display: table-cell !important;
     } 
 </style>
-
 <div class="jumbotron">
-
     <h2>Events</h2>
     <br />
-
     @using (Ajax.BeginForm("Create", new AjaxOptions
     {
         HttpMethod = "Post",
@@ -29,13 +25,12 @@
     {
         <button type="submit" value="Create" class="btn btn-success">Add new event</button>
     }
-
     <br />
     <input type="button" class="btn btn-danger" value="Disable" onclick="location.href='@Url.Action("Disable", "Event")'" />
     <br /> <br />
-
-    @{
+        @{
         //var eventos = ViewData["allEvents"] as List<Event>;
+
         @Html.Grid(ViewData.Model).Columns(columns =>
         {
            columns.Add().Titled("<input id='allChk' type='checkbox' /> ")
@@ -79,11 +74,9 @@
     }
 
     $(document).ready(function () {
-
-        var checkAllBox = $("#allChk");
-
-        checkAllBox.click(function () {
-            var status = checkAllBox.prop('checked');
+         
+        $("#allChk").click(function () {
+            var status = $("#allChk").prop('checked');
             selectedCheckbox(status);
         });
     });
@@ -92,16 +85,13 @@
 
         var opcion = confirm("¿Seguro que deseas eliminar el evento [" + eventName + "]?");
         if (opcion == true) {
-                $.ajax({
+            $.ajax({
                 url: '@Url.Action("Delete", "Event")',
                 data: { id: eventId },
                 type: 'POST',
                 success: function () { alert("El evento se ha eliminado correcatemente."); },
                 error: function () { alert("Ha ocurrido un error eliminando el evento."); }
-        });
-	    } else {
-            return false;
-        }
+            });
+	    } else { return false; }
     }
-  
 </script>
