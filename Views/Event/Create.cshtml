@@ -16,6 +16,7 @@
 @*<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>*@
 
 <style type="text/css">
+
     .form-control option {
         display: block;
         padding: 3px 20px;
@@ -48,6 +49,12 @@
     } 
     .form-group .form-row {
         margin-bottom: 10px;
+    }
+
+    .btn-secondary:hover {
+        color: white; 
+        border: lightblue 1px solid;
+        background-color: gainsboro;
     }
 </style>
 
@@ -101,13 +108,12 @@
         <div class="form-row">
             <br />
             <div class="col">
-                <button type="button" class="btn btn-success" id="CreateBtn" value="Create">Create</button>
+                <button type="button" class="btn btn-success" id="CreateBtn" value="Create" style="width: 125px;">Create</button>
             </div>
             <br />
             <div class="col">
-                <input type="button" class="btn btn-primary" id="CancelBtn" value="Cancelar" />
-            </div>
-            @*onclick="location.href='@Url.Action("Index", "Event")'"*@
+                <input type="button" class="btn btn-secondary" id="CancelBtn" value="Cancel" style="color: darkblue; border: lightblue 1px solid; width: 125px;" />
+            </div> 
         </div>
     </div>
 </div>
@@ -119,7 +125,7 @@
         $("#CreateBtn").click(function () { 
             if (IsValid()) { 
                 $.ajax({
-                    url: '@Url.Action("CreateEvent", "Event")',
+                    url: '@Url.Action("Create", "Event")',
                     data: { entity: BuildNewEvent() },
                     type: 'POST',
                     success: function (data) { alert("El nuevo evento [" + data + "] se ha creado correcatemente."); ReturnToIndex(); },

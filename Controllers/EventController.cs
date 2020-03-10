@@ -22,35 +22,20 @@ namespace EventManager.Controllers
             
             return View(((IEnumerable<Event>)Session["allDataList"]));
         } 
-        public ActionResult AddNew(Event e)
-        {
-            CreateEvent(e);
-
-            var allEvents = GetEvents();
-            ViewData["allEvents"] = allEvents;
-            ViewData.Model = allEvents;
-            Session["allDataList"] = allEvents;
-
-            return RedirectToAction("Index", new RouteValueDictionary(new { controller = "Event", action = "Index"})); 
-        }
-
         public ActionResult Create()
         {
             Session["selectCompanies"] = Session["selectCompanies"] ?? GetSelectedCompanies();
             Session["selectLanguages"] = Session["selectLanguages"] ?? GetSelectedLanguages();
 
-            var e = new Event
-            {
+            var e = new Event {
                 Created = DateTime.Now,
                 Sessions = 0,
                 Capacity = 0,
                 EventDateTime = DateTime.Now,
                 Active = true
-            };
-
+            }; 
             return View(e);
         }
-
         [HandleError]
         public ActionResult Edit(int id)
         {
@@ -112,7 +97,7 @@ namespace EventManager.Controllers
                     .FirstOrDefault();
             }
         }
-        public int CreateEvent(Event entity)
+        public int Create(Event entity)
         {
             using (ApplicationDbContext context = new ApplicationDbContext())
             {
@@ -128,11 +113,12 @@ namespace EventManager.Controllers
                     CompanyId = entity.CompanyId,
                     LanguageId = entity.LanguageId
                 };
+
                 context.Event.Add(newEvent);
                 context.SaveChanges();
                 return newEvent.Id;
             }
-        }
+        } 
         public void Remove(int id)
         {
             using (ApplicationDbContext context = new ApplicationDbContext())
@@ -142,13 +128,20 @@ namespace EventManager.Controllers
                 context.SaveChanges();
             }
         }
-        public bool Update(IDbEntity entity)
+        public bool Update(Event entity)
         {
             using (ApplicationDbContext context = new ApplicationDbContext())
             {
-                var entityToUpdate = context.Event.SingleOrDefault(p => p.Id == ((Event)entity).Id);
+                var entityToUpdate = context.Event.SingleOrDefault(p => p.Id == entity.Id);
 
-                entityToUpdate.Name = ((Event)entity)?.Name;
+                entityToUpdate.Name = entity.Name;
+                entityToUpdate.Description = entity.Description;
+                entityToUpdate.Capacity = entity.Capacity;
+                entityToUpdate.Sessions = entity.Sessions;
+                entityToUpdate.EventDateTime = entity.EventDateTime;
+                entityToUpdate.Active = entity.Active;
+                entityToUpdate.CompanyId = entity.CompanyId;
+                entityToUpdate.LanguageId = entity.LanguageId;
                 entityToUpdate.Updated = DateTime.Now;
                 context.SaveChanges();
             }

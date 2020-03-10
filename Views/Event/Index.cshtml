@@ -24,23 +24,20 @@
         OnSuccess = "Loaded"
     }))
     {
-        <button type="submit" value="Create" class="btn btn-success">Add new event</button>
+        <button type="submit" value="Create" class="btn btn-success">Create</button>
     }
     <br />
-    <input type="button" class="btn btn-danger" value="Disable" onclick="location.href='@Url.Action("Disable", "Event")'" />
+    <input type="button" class="btn btn-primary" value="Disable" onclick="location.href='@Url.Action("Disable", "Event")'" />
     <br /><br />
-
-
+     
     <!-- Button trigger modal -->
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
-        Launch demo modal
+    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModalCenter">
+        Delete Simulation
     </button>
     <br /><br />
-
-
+     
     @{
         //var eventos = ViewData["allEvents"] as List<Event>;
-
         @Html.Grid(ViewData.Model).Columns(columns =>
         {
            columns.Add().Titled("<input id='allChk' type='checkbox' /> ")
@@ -72,6 +69,7 @@
            .HeaderRenderer = null;
        }).WithPaging(10).Sortable(true).Filterable(true);
     }
+    
 
 
     <!-- Modal panel -->
@@ -79,21 +77,23 @@
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLongTitle"><b>Delete Event</b></h5>
+                    <h5 class="modal-title" id="exampleModalLongTitle" style="float: left;"><b>Delete Event</b></h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    ¿Seguro que deseas eliminar el evento []?
+                    ¿Seguro que deseas eliminar el evento [loren ipsum dolor]?
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-primary">Continue deleting</button>
+                    <button type="button" class="btn btn-danger">Continue Deleting</button>
                 </div>
             </div>
         </div>
     </div>
+
+
 
 </div>
 
@@ -103,7 +103,7 @@
         $("input[type=checkbox]").each(function () {
             $(this).prop("checked", status);
         });
-    }
+    } 
 
     $(document).ready(function () {
          
@@ -118,7 +118,7 @@
         var opcion = confirm("¿Seguro que deseas eliminar el evento [" + eventName + "]?");
         if (opcion == true) {
             $.ajax({
-                url: '@Url.Action("Delete", "Event")',
+                url: '@Url.Action("Update", "Event")',
                 data: { id: eventId },
                 type: 'POST',
                 success: function () { alert("El evento se ha eliminado correcatemente."); },
