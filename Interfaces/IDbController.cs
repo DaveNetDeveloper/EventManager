@@ -5,7 +5,7 @@ namespace EventManager.Controllers
 {
     internal interface IDbController
     {
-        int Create(Event pEvent);
+        int AddNew(Event pEvent);
         ActionResult Edit(int id);
         IDbEntity Get(int id);
         IEnumerable<IDbEntity> GetEvents();

@@ -97,7 +97,7 @@ namespace EventManager.Controllers
                     .FirstOrDefault();
             }
         }
-        public int Create(Event entity)
+        public int AddNew(Event entity)
         {
             using (ApplicationDbContext context = new ApplicationDbContext())
             {

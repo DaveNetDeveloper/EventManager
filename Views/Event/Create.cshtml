@@ -125,7 +125,7 @@
         $("#CreateBtn").click(function () { 
             if (IsValid()) { 
                 $.ajax({
-                    url: '@Url.Action("Create", "Event")',
+                    url: '@Url.Action("AddNew", "Event")',
                     data: { entity: BuildNewEvent() },
                     type: 'POST',
                     success: function (data) { alert("El nuevo evento [" + data + "] se ha creado correcatemente."); ReturnToIndex(); },
