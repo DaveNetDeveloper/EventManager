@@ -145,12 +145,8 @@
                     type: 'POST',
                     success: function (data) {
 
-                        if (data) {
-                            ReturnToIndex();
-                        }
-                        else {
-                            ShowErrorMessage();
-                        }
+                        if (data) ReturnToIndex();
+                        else ShowErrorMessage();
                     },
                     error: function () { ShowErrorMessage() }
                 });
