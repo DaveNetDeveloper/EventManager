@@ -55,8 +55,10 @@
         color: white;
         border: lightblue 1px solid;
         background-color: gainsboro;
-    }  
-</style> 
+    } 
+    
+</style>
+
 <div class="jumbotron" style="min-height: 400px;">
     <h2>Edit Event</h2>
     <br />
@@ -137,23 +139,22 @@
 
     function SaveChanges() {
 
-        if (IsValid()) { 
+        if (IsValid()) {
+            $.ajax({
+                url: '@Url.Action("Update", "Event")',
+                data: { entity: BuilEvent() },
+                type: 'POST',
+                success: function (data) {
 
-                $.ajax({
-                    url: '@Url.Action("Update", "Event")',
-                    data: { entity: BuilEvent() },
-                    type: 'POST',
-                    success: function (data) {
-
-                        if (data) ReturnToIndex();
-                        else ShowErrorMessage();
-                    },
-                    error: function () { ShowErrorMessage() }
-                });
-            }
-            else { 
-                alert("Formulario no válido...");
-            }
+                    if (data) ReturnToIndex();
+                    else ShowErrorMessage();
+                },
+                error: function () { ShowErrorMessage() }
+            });
+        }
+        else { 
+            alert("Formulario no válido...");
+        }
     }
 
     function BuilEvent()
@@ -199,5 +200,6 @@
 
     function ReturnToIndex() {
         location.href = '@Url.Action("Index", "Event")';
-    } 
+    }
+
 </script>

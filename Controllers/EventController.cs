@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EventManager.Common;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
@@ -20,7 +21,7 @@ namespace EventManager.Controllers
             ViewData["allEvents"] = allEvents;
             ViewData["firstEvent"] = allEvents.FirstOrDefault();
             
-            return View(((IEnumerable<Event>)Session["allDataList"]));
+            return View((IEnumerable<Event>)Session["allDataList"]);
         } 
         public ActionResult Create()
         {
@@ -39,33 +40,27 @@ namespace EventManager.Controllers
         [HandleError]
         public ActionResult Edit(int id)
         {
-            //var _event = new Event() { Id = 2, Name = "Evento modificado", Updated = DateTime.Now };
-            //Update(_event); 
-            //
             //Fill Combos
             Session["selectCompanies"] = Session["selectCompanies"] ?? GetSelectedCompanies();
             Session["selectLanguages"] = Session["selectLanguages"] ?? GetSelectedLanguages();
             
-            Session["Id"] = (Session["Id"] == null || (int)Session["Id"] != id) ? id : (int)Session["Id"];
-            
+            Session["Id"] = (Session["Id"] == null || (int)Session["Id"] != id) ? id : (int)Session["Id"]; 
             Session["event"] = Get((int)Session["Id"]);
 
             return View((Event)Session["event"]);
         }
-        public ActionResult Disable(List<int> eventIds)
+        public ActionResult Disable(int id)
         {
-            //DisableEvents(eventIds);
+            using (ApplicationDbContext context = new ApplicationDbContext())
+            {
+                context.Event.Where(e => id == e.Id).ToList().ForEach(e => e.Active = false); 
+                context.SaveChanges();
+            }  
             return RedirectToAction("Index", new RouteValueDictionary(new { controller = "Event", action = "Index" }));
         } 
         public ActionResult Delete(int id)
         {
             Remove(id);
-            //var allEvents = GetEvents();
-
-            //ViewData["allDataList"] = allEvents;
-            //ViewData.Model = allEvents; 
-
-            //Session["reCharge"] = true; 
             return RedirectToAction("Index", new RouteValueDictionary(new { controller = "Event", action = "Index"}));
         }
         public IEnumerable<IDbEntity> GetEvents()
@@ -108,10 +103,10 @@ namespace EventManager.Controllers
                     Capacity = entity.Capacity != null ? entity.Capacity : 0,
                     Sessions = entity.Sessions != null ? entity.Sessions : 0,
                     EventDateTime = entity.EventDateTime ?? DateTime.Now,
-                    Created = DateTime.Now,
-                    Active = true,
+                    Active = entity.Active,
                     CompanyId = entity.CompanyId,
-                    LanguageId = entity.LanguageId
+                    LanguageId = entity.LanguageId,
+                    Created = DateTime.Now
                 };
 
                 context.Event.Add(newEvent);
@@ -121,12 +116,20 @@ namespace EventManager.Controllers
         } 
         public void Remove(int id)
         {
-            using (ApplicationDbContext context = new ApplicationDbContext())
-            {
-                var entityToRemove = context.Event.SingleOrDefault(p => p.Id == id);
-                context.Event.Remove(entityToRemove);
-                context.SaveChanges();
+            try
+            { 
+                using (ApplicationDbContext context = new ApplicationDbContext())
+                {
+                    var entityToRemove = context.Event.SingleOrDefault(p => p.Id == id);
+                    context.Event.Remove(entityToRemove);
+                    context.SaveChanges(); 
+                }
+                Session["ConfirmationDelete"] = Constants.ActionResult_Success;
             }
+            catch
+            {
+                Session["ConfirmationDelete"] = Constants.ActionResult_Error;
+            } 
         }
         public bool Update(Event entity)
         {
@@ -147,6 +150,10 @@ namespace EventManager.Controllers
             }
             return true;
         }
+        public void ResetSession(string name)
+        {
+            Session[name] = null;
+        } 
          
         //privates
         protected List<SelectListItem> GetSelectedCompanies()

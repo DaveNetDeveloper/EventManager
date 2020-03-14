@@ -12,9 +12,6 @@
 <script src="@Url.Content("~/Scripts/gridmvc.min.js")"></script>
 <script src="@Url.Content("~/Scripts/popper.min.js")"></script>
 
-@*<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">*@
-@*<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>*@
-
 <style type="text/css">
 
     .form-control option {
@@ -28,35 +25,102 @@
         text-decoration: none;
         cursor: pointer;
         background-color: white;
-    } 
+    }
+
     .form-control:hover {
         color: #333;
         background-color: #e6e6e6;
         border-color: #adadad;
         cursor: pointer;
-    } 
+    }
+
     .form-control option::-moz-selection {
         background: yellow;
-    } 
+    }
+
     .form-control option::selection {
         background: yellow;
-    } 
+    }
+
     .form-control option:focus, option:hover {
         color: #262626 !important;
         text-decoration: none !important;
         background-color: red !important;
         cursor: pointer;
-    } 
+    }
+
     .form-group .form-row {
         margin-bottom: 10px;
     }
 
     .btn-secondary:hover {
-        color: white; 
+        color: white;
         border: lightblue 1px solid;
         background-color: gainsboro;
     }
 </style>
+ 
+<style type="text/css">
+
+    #top-panel {
+        background: #fdccd3;
+        border: 2px dashed #ff7d77;
+        padding: 14px 20px;
+        text-align: right;
+        
+    }
+
+    #sub-panel {
+        text-align: center;
+    }
+
+    #sub-panel a {
+        width: 150px;
+        float: right; 
+        color: black;
+        text-decoration: none;
+        margin-right: 30px;
+        font-weight: bold;
+    }
+
+    #sub-panel a span {
+        padding: 6px;
+        display: block;
+        border: solid 1px #1E90FF;
+    }
+
+    strong {
+        color: black;
+    }
+
+    .face {
+        border: solid 2px #a6c34e;
+        margin-left: 10px;
+        float: right;
+    }
+
+    :focus {
+        outline: 0
+    }
+</style>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#sub-panel").click(function () {
+            $("#top-panel").slideToggle();
+            var el = $("#shText");
+            var state = $("#shText").html();
+            state = (state == 'Hide' ? '<span id="shText">Show</span>' : '<span id="shText">Hide</span>');
+            el.replaceWith(state);
+        });
+    });
+</script>
+
+<div id="top-panel">
+    <strong>Title</strong>
+    <br /> content
+</div>  
+<div id="sub-panel"><a href="#" id="toggle"><span id="shText">Hide</span></a></div>
 
 <div class="jumbotron" style="min-height: 400px;">
     <h2>Create Event</h2>
@@ -113,17 +177,17 @@
             <br />
             <div class="col">
                 <input type="button" class="btn btn-secondary" id="CancelBtn" value="Cancel" style="color: darkblue; border: lightblue 1px solid; width: 125px;" />
-            </div> 
+            </div>
         </div>
     </div>
 </div>
 <script type="text/javascript">
 
-    $(document).ready(function () {  
+    $(document).ready(function () {
 
         //Click on create
-        $("#CreateBtn").click(function () { 
-            if (IsValid()) { 
+        $("#CreateBtn").click(function () {
+            if (IsValid()) {
                 $.ajax({
                     url: '@Url.Action("AddNew", "Event")',
                     data: { entity: BuildNewEvent() },
@@ -132,19 +196,19 @@
                     error: function () { alert("Ha ocurrido un error creando el nuevo evento."); }
                 });
             }
-            else { 
+            else {
                 alert("Formulario no válido...");
             }
-        }); 
+        });
 
         //Click on cancel
-        $("#CancelBtn").click(function () { 
+        $("#CancelBtn").click(function () {
             return ConfirmCancel();
-        }); 
+        });
     });
 
     function BuildNewEvent()
-    { 
+    {
         var event = {
             Id: $("#modelId").val(),
             Name: $("#modelName").val(),
@@ -154,13 +218,14 @@
             EventDateTime: $("#modelEventDateTime").val(),
             Active: $("#modelActive").prop("checked"),
             CompanyId: $("#modelCompany").val(),
-            LanguageId: $("#modelLanguage").val() 
-        }; 
+            LanguageId: $("#modelLanguage").val()
+        };
         return event;
     }
 
     function IsValid() {
 
+        alert("Form data validation is not yet implemented");
         return true;
     }
 
@@ -175,4 +240,5 @@
      function ReturnToIndex() {
         location.href = '@Url.Action("Index", "Event")';
     } 
+
 </script>
