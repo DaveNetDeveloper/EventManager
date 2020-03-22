@@ -10,24 +10,90 @@
 <script src="@Url.Content("~/Scripts/jquery-3.4.1.min.js")"></script>
 <script src="@Url.Content("~/Scripts/gridmvc.min.js")"></script>
 
+<style type="text/css">
 
+    .btn-secondary:hover {
+        color: white;
+        border: lightblue 1px solid;
+        background-color: gainsboro;
+    }
+</style>
 
 <form>
     <h2>Login Account</h2>
 
     <div class="form-group">
-        <label for="exampleInputEmail1">Email address</label>
-        <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+        <label for="email">Email address</label>
+        <input type="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Enter email" value="@Session["Username"]">
         <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
     </div>
     <div class="form-group">
-        <label for="exampleInputPassword1">Password</label>
-        <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+        <label for="password">Password</label>
+        <input type="password" class="form-control" id="password" placeholder="Password">
     </div>
     <div class="form-check">
-        <input type="checkbox" class="form-check-input" id="exampleCheck1">
-        <label class="form-check-label" for="exampleCheck1">Check me out</label>
+        <input type="checkbox" class="form-check-input" id="remeberMe">
+        <label class="form-check-label" for="remeberMe">Check me out</label>
     </div>
-
-    <button type="submit" class="btn btn-primary">Submit</button>
+    <div class="form-group">
+        <div class="col">
+            <button type="button" class="btn btn-secondary" id="RecoveryBtn" value="Recovery Password" style="color: darkblue; border: lightblue 1px solid; width: 150px;">Recovery Password</button>
+        </div>
+        <br />
+        <div class="col">
+            <button type="submit" class="btn btn-success" id="LoginBtn" value="Login" style="width: 125px;">Login</button>
+        </div>
+    </div>
 </form>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+        //Click on Login
+        $("#LoginBtn").click(function () {
+            if (IsValid()) {
+                $.ajax({
+                    url: '@Url.Action("LoginUser", "Login")',
+                    data: { login: BuildLogin() },
+                    type: 'POST',
+                    success: function (data) { if (data.toLowerCase() == 'true') { ReturnToIndex(); } },
+                    error: function () { alert("Ha ocurrido un problema comprobando el usuario."); }
+                });
+            }
+            else {
+                alert("Formulario no válido...");
+            }
+        });
+
+        //Click on recovery psswd
+        $("#RecoveryBtn").click(function () {
+            return RecoveryPassword();
+        });
+    });
+
+    function BuildLogin()
+    {
+        return {
+            Username: $("#email").val(),
+            Password: $("#password").val(),
+            RemeberAccount: $("#remeberMe").prop("checked")
+        };
+    }
+
+    function IsValid() {
+
+        //alert("Form data validation is not yet implemented");
+        return true;
+    }
+
+    function ReturnToIndex() {
+        location.href = '@Url.Action("Index", "Event")';
+    } 
+
+    function RecoveryPassword() {
+
+        alert("Se ha enviado un correo con las instrucciones para obtener la nueva contraseña");
+    }
+
+</script>

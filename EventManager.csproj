@@ -145,6 +145,8 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Common\Constants.cs" />
+    <Compile Include="Common\Settings.cs" />
+    <Compile Include="Managers\Encoder.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\EventController.cs" />
@@ -156,13 +158,21 @@
     <Compile Include="Interfaces\IAuditEntity.cs" />
     <Compile Include="Interfaces\IDbEntity.cs" />
     <Compile Include="Interfaces\IDbController.cs" />
-    <Compile Include="Models\City.cs" />
-    <Compile Include="Models\Login.cs" />
-    <Compile Include="Models\Language.cs" />
-    <Compile Include="Models\Company.cs" />
-    <Compile Include="Models\Country.cs" />
-    <Compile Include="Models\Customer.cs" />
-    <Compile Include="Models\Event.cs" />
+    <Compile Include="Managers\Exporter.cs" />
+    <Compile Include="Managers\Logger.cs" />
+    <Compile Include="Managers\Mailer.cs" />
+    <Compile Include="Managers\Translator.cs" />
+    <Compile Include="Models\Entities\City.cs" />
+    <Compile Include="Models\Entities\User.cs" />
+    <Compile Include="Models\System\Login.cs" />
+    <Compile Include="Models\Entities\Language.cs" />
+    <Compile Include="Models\Entities\Company.cs" />
+    <Compile Include="Models\Entities\Country.cs" />
+    <Compile Include="Models\Entities\Customer.cs" />
+    <Compile Include="Models\Entities\Event.cs" />
+    <Compile Include="Models\System\MailContent.cs" />
+    <Compile Include="Models\System\MailSettings.cs" />
+    <Compile Include="Models\System\Visitor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -214,7 +224,7 @@
     <Content Include="Views\Event\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="App_Data\" />
+    <Folder Include="App_Data\DBScripts\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

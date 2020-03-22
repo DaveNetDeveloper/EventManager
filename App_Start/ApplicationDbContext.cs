@@ -17,6 +17,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<Country> Country { get; set; }
     public DbSet<City> City { get; set; }
     public DbSet<Language> Language { get; set; }
+    public DbSet<User> User { get; set; }
 
     public ApplicationDbContext() : base("DefaultConnection")
     {

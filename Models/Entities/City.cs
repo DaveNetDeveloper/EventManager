@@ -1,9 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
 namespace EventManager
-{
-
-    public class Country : IDbEntity
+{ 
+    public class City : IDbEntity
     {
         [Required]
         public int Id { get; set; }

@@ -190,7 +190,7 @@
             if (IsValid()) {
                 $.ajax({
                     url: '@Url.Action("AddNew", "Event")',
-                    data: { entity: BuildNewEvent() },
+                    data: { entity: BuildEvent() },
                     type: 'POST',
                     success: function (data) { alert("El nuevo evento [" + data + "] se ha creado correcatemente."); ReturnToIndex(); },
                     error: function () { alert("Ha ocurrido un error creando el nuevo evento."); }
@@ -207,7 +207,7 @@
         });
     });
 
-    function BuildNewEvent()
+    function BuildEvent()
     {
         var event = {
             Id: $("#modelId").val(),

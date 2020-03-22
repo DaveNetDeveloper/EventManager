@@ -10,7 +10,9 @@ namespace EventManager.Controllers
     [HandleError]
     public class EventController : Controller, IDbController
     {
-        public EventController() { } 
+        public EventController() { }
+        
+        [Authorize]
         public ActionResult Index()
         { 
             var allEvents = GetEvents();
@@ -22,7 +24,8 @@ namespace EventManager.Controllers
             ViewData["firstEvent"] = allEvents.FirstOrDefault();
             
             return View((IEnumerable<Event>)Session["allDataList"]);
-        } 
+        }
+        [Authorize]
         public ActionResult Create()
         {
             Session["selectCompanies"] = Session["selectCompanies"] ?? GetSelectedCompanies();
@@ -37,7 +40,7 @@ namespace EventManager.Controllers
             }; 
             return View(e);
         }
-        [HandleError]
+        [Authorize] [HandleError]
         public ActionResult Edit(int id)
         {
             //Fill Combos
@@ -49,6 +52,7 @@ namespace EventManager.Controllers
 
             return View((Event)Session["event"]);
         }
+        [Authorize]
         public ActionResult Disable(int id)
         {
             using (ApplicationDbContext context = new ApplicationDbContext())
@@ -57,7 +61,8 @@ namespace EventManager.Controllers
                 context.SaveChanges();
             }  
             return RedirectToAction("Index", new RouteValueDictionary(new { controller = "Event", action = "Index" }));
-        } 
+        }
+        [Authorize]
         public ActionResult Delete(int id)
         {
             Remove(id);
@@ -71,7 +76,7 @@ namespace EventManager.Controllers
                 //.Include("Company")
                 //.Include("Language").ToList();
             }
-        } 
+        }
         public IDbEntity Get(int id)
         {
             using (ApplicationDbContext context = new ApplicationDbContext())
@@ -81,17 +86,7 @@ namespace EventManager.Controllers
                         //.Include("Language")
                         .SingleOrDefault(e => e.Id == id));
             }
-        }
-        public Event Get(string eventName)
-        {
-            using (ApplicationDbContext context = new ApplicationDbContext())
-            {
-                return (from p in context.Event
-                        where p.Name.Equals(eventName)
-                        select p)
-                    .FirstOrDefault();
-            }
-        }
+        } 
         public int AddNew(Event entity)
         {
             using (ApplicationDbContext context = new ApplicationDbContext())
