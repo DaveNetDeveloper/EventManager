@@ -1,12 +1,22 @@
-﻿<!DOCTYPE html>
+﻿@using System.Threading;
+
+<!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>@ViewBag.Title - Event Manager</title>
+
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
+
+<style type="text/css">
+    .visible-item {  display: block; }
+    .hidden-item {  display: none !important; }
+</style>
+
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -25,7 +35,9 @@
                     <li>@Html.ActionLink("Contacto", "Contact", "Home")</li>
 
                     <li>@Html.ActionLink("Login", "Login", "Login")</li>
-                    <li>@Html.ActionLink("Logout", "Logout", "Login")</li>
+
+
+                    <li class="@(Thread.CurrentPrincipal.Identity.IsAuthenticated ? "visible-item":"hidden-item")">@Html.ActionLink("Logout", "Logout", "Login")</li>
                 </ul>
             </div>
         </div>

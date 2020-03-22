@@ -26,9 +26,9 @@ namespace EventManager
                 FormsAuthenticationTicket authTicket = FormsAuthentication.Decrypt(authCookie.Value);
                 var identity = new GenericIdentity(authTicket.Name, "Forms"); 
 
-                if(identity.IsAuthenticated)
-                { 
-                //Context.User = identity;
+                if(!identity.IsAuthenticated)
+                {
+                    throw new UnauthorizedAccessException();
                 }  
             }
         }

@@ -57,7 +57,7 @@
                     url: '@Url.Action("LoginUser", "Login")',
                     data: { login: BuildLogin() },
                     type: 'POST',
-                    success: function (data) { if (data.toLowerCase() == 'true') { ReturnToIndex(); } },
+                    success: function (data) { alert(data.toLowerCase()); },
                     error: function () { alert("Ha ocurrido un problema comprobando el usuario."); }
                 });
             }
@@ -87,8 +87,8 @@
         return true;
     }
 
-    function ReturnToIndex() {
-        location.href = '@Url.Action("Index", "Event")';
+    function GoToIndex() {
+        
     } 
 
     function RecoveryPassword() {

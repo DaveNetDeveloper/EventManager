@@ -8,27 +8,21 @@ namespace EventManager.Managers
 {
     public class Mailer
     {
-        private MailSettings mailSettings;
-
-        public Mailer(MailSettings pMailSettings)
-        {
-            mailSettings = pMailSettings;
-        }
         public static bool SendMail(MailSettings datosContacto)
         {
             try
             {
-                MailMessage mailMessage = new MailMessage(Encoder.Base64Decode(Settings.MailFrom), Encoder.Base64Decode(Settings.MailTo))
+                MailMessage mailMessage = new MailMessage(Coder.Base64Decode(Settings.MailFrom), Coder.Base64Decode(Settings.MailTo))
                 {
                     IsBodyHtml = true,
                     //mailMessage.Subject = Resources.resource.Mail_Subject; 
                     Body = GetUpdatedMailContent(datosContacto)
                 };
 
-                SmtpClient smtpClient = new SmtpClient(Encoder.Base64Decode(Settings.MailHost), int.Parse(Encoder.Base64Decode(Settings.MailPort)));
+                SmtpClient smtpClient = new SmtpClient(Coder.Base64Decode(Settings.MailHost), int.Parse(Coder.Base64Decode(Settings.MailPort)));
                 //smtpClient.EnableSsl = bool.Parse(Settings.MailEnableSsl);
 
-                var credentials = new NetworkCredential(Encoder.Base64Decode(Settings.MailUser), Encoder.Base64Decode(Settings.MailPassword));
+                var credentials = new NetworkCredential(Coder.Base64Decode(Settings.MailUser), Coder.Base64Decode(Settings.MailPassword));
 
                 smtpClient.Credentials = credentials;
                 smtpClient.Send(mailMessage);

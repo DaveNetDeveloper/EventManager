@@ -3,7 +3,7 @@ using System.Text;
 
 namespace EventManager.Managers
 {
-    public static class Encoder
+    public static class Coder
     {
         public static string Base64Encode(string textToEndode)
         {
